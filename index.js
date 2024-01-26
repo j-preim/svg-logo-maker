@@ -8,6 +8,12 @@ inquirer
       type: "input",
       message: "What text should the image display? (Up to three characters)",
       name: "textContent",
+      validate: textContent => {
+        if (textContent.length > 3){
+          return "Your text cannot be longer than three characters"
+        }
+        return true;
+      }
     },
     {
       type: "input",
@@ -32,8 +38,8 @@ inquirer
     },
   ])
   .then((response) =>
-    console.log(shapes(response))
-    // fs.writeFile("logo.svg",
-    // shapes(response),
-    // (err) => err ? console.error(err) : console.log("Generated logo.svg"))
+    // console.log(shapes(response))
+    fs.writeFile("logo.svg",
+    shapes(response),
+    (err) => err ? console.error(err) : console.log("Generated logo.svg"))
   )
