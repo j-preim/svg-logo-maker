@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
-const shapes = require("./lib/shapes.js");
+const {Circle, Triangle, Square} = require("./lib/shapes.js");
 
 inquirer
   .prompt([
@@ -8,12 +8,12 @@ inquirer
       type: "input",
       message: "What text should the image display? (Up to three characters)",
       name: "textContent",
-      validate: textContent => {
-        if (textContent.length > 3){
-          return "Your text cannot be longer than three characters"
+      validate: (textContent) => {
+        if (textContent.length > 3) {
+          return "Your text cannot be longer than three characters";
         }
         return true;
-      }
+      },
     },
     {
       type: "input",
@@ -24,10 +24,9 @@ inquirer
       type: "list",
       message: "What shape would you like to create?",
       choices: [
-        {value: "Circle"},
-        {value: "Triangle"},
-        {value: "Square"},
-        
+        { value: "Circle" },
+        { value: "Triangle" },
+        { value: "Square" },
       ],
       name: "shapeName",
     },
@@ -37,9 +36,20 @@ inquirer
       name: "shapeColor",
     },
   ])
-  .then((response) =>
-    // console.log(shapes(response))
-    fs.writeFile("logo.svg",
-    shapes(response),
-    (err) => err ? console.error(err) : console.log("Generated logo.svg"))
-  )
+
+  .then((response) => {
+    let newShape;
+    if (response.shapeName === "Circle") {
+      newShape = new Circle(response.shapeName, response.shapeColor, response.textContent, response.textColor);
+    }
+    if (response.shapeName === "Triangle") {
+      newShape = new Triangle(response.shapeName, response.shapeColor, response.textContent, response.textColor);
+    }
+    if (response.shapeName === "Square") {
+      newShape = new Square(response.shapeName, response.shapeColor, response.textContent, response.textColor);
+    }
+
+    fs.writeFile("logo.svg", newShape.render(), (err) =>
+      err ? console.error(err) : console.log("Generated logo.svg")
+    );
+  });
