@@ -1,7 +1,9 @@
+// Add the required components
 const inquirer = require("inquirer");
 const fs = require("fs");
-const {Circle, Triangle, Square} = require("./lib/shapes.js");
+const shapes = require("./lib/shapes.js");
 
+// Create the inquirer prompts for the user to answer
 inquirer
   .prompt([
     {
@@ -37,18 +39,20 @@ inquirer
     },
   ])
 
+  // Process the user's responses and determine the correct shape object
   .then((response) => {
     let newShape;
     if (response.shapeName === "Circle") {
-      newShape = new Circle(response.shapeName, response.shapeColor, response.textContent, response.textColor);
+      newShape = new shapes.Circle(response.shapeName, response.shapeColor, response.textContent, response.textColor);
     }
     if (response.shapeName === "Triangle") {
-      newShape = new Triangle(response.shapeName, response.shapeColor, response.textContent, response.textColor);
+      newShape = new shapes.Triangle(response.shapeName, response.shapeColor, response.textContent, response.textColor);
     }
     if (response.shapeName === "Square") {
-      newShape = new Square(response.shapeName, response.shapeColor, response.textContent, response.textColor);
+      newShape = new shapes.Square(response.shapeName, response.shapeColor, response.textContent, response.textColor);
     }
 
+    // Write the rendered logo contents to a new file
     fs.writeFile("logo.svg", newShape.render(), (err) =>
       err ? console.error(err) : console.log("Generated logo.svg")
     );
